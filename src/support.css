@@ -1,0 +1,42 @@
+#grid_chooser
+{
+	width: 156px;
+	height: 156px;
+	margin: auto;
+}
+
+#grid_chooser .grid_chooser_bit
+{
+	border: 1px solid #ccc;
+	width: 13%;
+	height: 13%;
+	display: inline-block;
+	margin: 2%;
+	cursor: pointer;
+}
+
+#grid_chooser .grid_chooser_bit.chosen
+{
+	border: 1px solid #ff8d00;
+}
+
+#grid_configurator 
+{
+	margin: 20px 0;
+}
+
+#grid_configurator table
+{
+  margin: auto;
+  width: 80%;
+	height: 300px;
+	border-spacing: 10px;
+  border-collapse: separate;
+}
+
+#grid_configurator td
+{
+	text-align: center;
+	border: 1px dashed #ccc;
+	cursor: pointer;
+}

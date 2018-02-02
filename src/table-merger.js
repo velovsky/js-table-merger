@@ -1,0 +1,111 @@
+function table_merger(table_id,merge_cell_class)
+{
+    //Configuration
+    //cell class to be merged
+    this.cell_class = merge_cell_class === undefined ? 'selected' : merge_cell_class;
+    
+    if(table_id === undefined)
+      console.error("bad input");
+    else
+      this.table_id = table_id;
+    
+    //merge selected cells
+    merge(this.table_id,this.cell_class);
+    
+    //merge cells
+    function merge(table_id,cell_class)
+    {
+      var table_div = table_id;
+      var hasMerged = true;
+
+      while(hasMerged)
+      {
+        hasMerged = false;
+        
+        if ($(table_div).find("." + cell_class).length < 2)
+          return;
+
+        //ROWS
+        //try to merge cells (horizontally)
+        var table_rows = $(table_div).find("tr");
+
+        for(var i=0; i < table_rows.length; i++)
+        {
+          var selected_cells_row = $(table_rows[i]).find("." + cell_class);
+
+          if(selected_cells_row.length < 2) //less than two cells to merge
+            continue;
+
+          //CELLS
+          for(var j=0; j < selected_cells_row.length; j++)
+          {
+            if(j >= selected_cells_row.length - 1) //last cell
+              break;
+
+            var current_cell = selected_cells_row[j];
+            var next_cell = selected_cells_row[j+1];
+
+            //check adjacency
+            if($(current_cell).nextAll().not(".hidden")[0] !== next_cell)
+              continue; //if false continue
+
+            //check size
+            if(current_cell.rowSpan !== next_cell.rowSpan)
+              continue;
+
+            //merge
+            $(current_cell).attr('colSpan',current_cell.colSpan + next_cell.colSpan);
+            $(next_cell).removeClass(cell_class);
+            $(next_cell).addClass('hidden');
+
+            //update
+            hasMerged = true;
+            selected_cells_row = $(table_rows[i]).find("." + cell_class);
+          }
+        }
+
+        //COLUMNS
+        //try to merge cells (vertically)
+        var selected_cells = $(table_div).find("." + cell_class);
+
+        if(selected_cells.length < 2) //no cells two merge
+          return;
+
+        for(var i=0; i < selected_cells.length; i++)
+        {
+          if(i >= selected_cells.length - 1) //last cell
+            break;
+
+          var current_cell = selected_cells[i];
+
+          //next cell
+          var cells = $(current_cell.parentElement).nextAll()[current_cell.rowSpan-1];
+          
+          if(!cells)
+           continue;
+          
+          var next_cell = cells.children[current_cell.cellIndex];
+
+          if(!next_cell) //no next_cell
+            continue;
+
+          //check adjacency
+          if( !$(next_cell).hasClass(cell_class) )
+            continue;
+
+          //check size
+          if(current_cell.colSpan !== next_cell.colSpan)
+            continue;
+
+          //merge
+          $(current_cell).attr('rowSpan',current_cell.rowSpan + next_cell.rowSpan);
+          $(next_cell).removeClass(cell_class);
+          $(next_cell).addClass('hidden');
+
+          //update
+          hasMerged = true;
+          selected_cells = $(table_div).find("." + cell_class);
+        }
+      }
+    }
+}

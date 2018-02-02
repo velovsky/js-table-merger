@@ -1,0 +1,12 @@
+/* default selected cells class */
+td.selected
+{
+	color: rgb(210,118,4);
+  border-color: #ff8d00 !important;
+}
+
+/* hidden cells: this class shouldn't be changed/deleted */
+td.hidden
+{
+	display: none;
+}

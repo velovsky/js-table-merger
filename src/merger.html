@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+
+	<!-- css -->
+  <link rel="stylesheet" href="./support.css">
+	<link rel="stylesheet" href="./table-merger.css">
+	
+	<!-- JS lib -->
+	<script src="../lib/jquery-3.2.1.min.js"></script>
+	<script src="./support.js" charset="utf-8"></script>
+	<script src="./table-merger.js" charset="utf-8"></script>
+	
+</head>
+
+<body>
+	<div id="grid_chooser" class="unselectable"></div>
+
+	<div id="grid_configurator" class="unselectable"></div>
+  
+  <button type="button" onclick="table_merger('#grid_configurator')">Merge Cells</button>
+	
+</body>
+
+<script>
+
+	var grid_chooser = "#grid_chooser";
+	
+	var grid_content = "";
+	for(var i=0; i<5; i++)
+  {
+		for(var j=0; j<5; j++)
+		{
+			grid_content += '<div data-x="'+ (i+1) +'" data-y="'+ (j+1) +'" class="grid_chooser_bit" '
+			+ ' onmouseover="dashboard_configurator.on_grid_selector_hover(this)"'
+			+ ' onclick="dashboard_configurator.on_grid_selector_click(this)"></div>';
+		}
+	}
+	
+	$(grid_chooser).append(grid_content);	
+
+</script>
+
+</html>
