@@ -1,3 +1,16 @@
+/**
+ * @summary     table-merger.js => API used to merge cells of a certain member class
+ * @description table_merger method. Dependent of jQuery library, can be used
+ *              on any HTML table object to merge cells (td).
+ * @version     0.0 / (requires jQuery)
+ * @file        table-merger.js
+ * @author      Tiago Câmara
+ * @copyright   N/A
+ *
+ */
+
+//PARAMS: required string table_id (e.g. "#table");
+//        optional string merge_cell_class (e.g. "merge_cells");
 function table_merger(table_id,merge_cell_class)
 {
     //Configuration
