@@ -59,7 +59,7 @@ function table_merger(table_id,merge_cell_class)
             var next_cell = selected_cells_row[j+1];
 
             //check adjacency
-            if($(current_cell).nextAll().not(".hidden")[0] !== next_cell)
+            if(current_cell.cellIndex + current_cell.colSpan !== next_cell.cellIndex)
               continue; //if false continue
 
             //check size

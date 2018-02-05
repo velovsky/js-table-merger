@@ -38,10 +38,10 @@ var dashboard_configurator =
 		var container = $("#grid_configurator");
 		
 		var table = '<table style="table-layout:fixed">';
-		for(var i=0; i<y; i++)
+		for(var i=0; i<x; i++)
 		{
 			table += "<tr>";
-			for(var j=0; j<x; j++)
+			for(var j=0; j<y; j++)
 			{
 				table += "<td id='grid_configurator_cell_"+i+j+"' onclick='$(this).toggleClass(\"selected\")'></td>";
 			}
