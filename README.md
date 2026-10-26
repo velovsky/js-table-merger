@@ -1,40 +1,81 @@
-# Table-Merger.js
-Analogous to MS Word table tool, **Table-Merger.js** let's you merge cells of a HTML table object. Only squares and rectangles shapes are merged. This method could be helpful on managing the layout or content of your webpage. For example, in a dashboard context, this tool could help the end-user to configure its desired layout.
-At the moment this is a simple **jQuery** tool that enables cells to be merged. If more public exposure is gained, the API could be further optimized and new methods added.
+# Table Merger
 
-Feel free to contribute or comment :)
+Merge and split cells of an HTML table, like the table tool in a word processor. Only rectangles
+merge. For example, a dashboard can let its users build their own layout from a grid.
 
-*Tested in Chrome and IE(v11) browsers.*
+- TypeScript, ES modules, no dependencies (about 1.5 kB)
+- `mergeCells`, `splitCell` and `splitAll`
+- Works with any `<table>` that is a full grid
 
-### Example
+**[Live demo](https://velovsky.github.io/js-table-merger/)**
 
-[Here](https://rawgit.com/velovsky/js-table-merger/master/src/merger.html) is an example, where you can build different tables and test the tool.
+## Install
 
-## Installing
-
-Download "table-merger" *js* and *css* files in *src* folder, and add them to your html file:
-```
-<script src="...src/js/table-merger.js" charset="utf-8"></script> 
-<link rel="stylesheet" href="...src/css/table-merger.css">
+```bash
+npm install github:velovsky/js-table-merger
 ```
 
-### Quick guide through
+The package builds itself on install (`prepare`). Without a bundler, load
+`dist/table-merger.iife.js` with a `<script>` tag; it exposes a global `TableMerger`.
 
-Once you have added the script/css files, simply call the ```table_merger``` method:
+## Usage
+
+Mark the cells to merge with the `selected` class, then call `mergeCells`:
+
+```ts
+import { mergeCells, splitCell, splitAll } from "js-table-merger";
+
+const table = document.querySelector("table")!;
+
+table.addEventListener("click", (event) => {
+  (event.target as Element).closest("td")?.classList.toggle("selected");
+});
+
+mergeCells(table); // or mergeCells("#layout")
+mergeCells(table, { selectedClass: "to-merge" }); // a custom class
+
+splitCell(table.rows[0].cells[0]); // split one merged cell
+splitAll(table); // split every merged cell
 ```
-table_merger('#table_id');
+
+## API
+
+| Function                                 | Returns                                        |
+| ---------------------------------------- | ---------------------------------------------- |
+| `mergeCells(target, { selectedClass? })` | The number of cells merged into another cell.  |
+| `splitCell(cell)`                        | The number of cells that became visible again. |
+| `splitAll(target)`                       | The number of cells that became visible again. |
+
+`target` is an `HTMLTableElement` or a CSS selector. An unknown target throws a `TypeError`.
+
+### How it works
+
+The table must be a full grid: one cell per row and column. A merge grows the first cell with
+`colSpan` / `rowSpan` and gives the cells it covers the `hidden` attribute, so they stay in the
+DOM. This keeps `cell.cellIndex` equal to the cell's column, and a split only has to show the
+covered cells again. Selected cells that cannot form a rectangle with a neighbour (for example
+the corner of an L shape) keep their selection.
+
+## Development
+
+```bash
+npm install
+npm run dev        # demo with hot reload
+npm test           # Vitest + jsdom
+npm run lint && npm run typecheck
+npm run build      # dist/ (ES module, IIFE, types)
 ```
-For a given table with *table_id* id, all its *td* (cell) elements with *selected* class will be merged (see example section). If for some reason you want to assign a different class name, you can call the same method with an additional parameter:
-```
-table_merger('#table_id','cells_to_merge_class');
-```
-To sum up, ```table_merger``` method has two string inputs:
 
- 1. **table_id** string prefixed with "#". If no parameter given, a console error will be outputted. If table id is not valid, nothing will be returned by the API;
- 2. **merge_cell_class** string (optional). A string with the exact name of the cells class (no "." prefix is required). This is only inputted if you want to assign a different class to the cells that are to be merged.
+## Changes in 2.0
 
-## Dependencies
+Version 1 (2018) was a jQuery plugin. Version 2 is a rewrite:
 
-* [jQuery](https://jquery.com/download/) - ```v3.2.x``` (if requested, it could be jQuery independent)
+- No jQuery. TypeScript with ES modules and type declarations.
+- `table_merger("#id", "class")` is now `mergeCells("#id", { selectedClass: "class" })`.
+- Covered cells use the `hidden` attribute, so the old `td.hidden` CSS rule is not needed.
+- New: `splitCell` and `splitAll`.
+- Fixed: the old function wrote `cell_class` and `table_id` to `window`.
 
-*OBS:* File available inside the *lib* folder.
+## License
+
+MIT
