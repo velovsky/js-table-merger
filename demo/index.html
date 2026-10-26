@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Table Merger</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main>
+      <h1>Table Merger</h1>
+      <p class="lead">
+        Pick a grid size, click cells to select them, then merge them. Only rectangles merge, like
+        the table tool in a word processor.
+      </p>
+
+      <section class="setup" aria-label="Grid size">
+        <div id="size-picker" role="grid" aria-label="Choose rows and columns"></div>
+        <output id="size-label">3 × 4</output>
+      </section>
+
+      <div class="actions">
+        <button type="button" id="merge">Merge selected</button>
+        <button type="button" id="split">Split selected</button>
+        <button type="button" id="split-all">Split all</button>
+        <button type="button" id="clear">Clear selection</button>
+      </div>
+
+      <table id="layout"></table>
+      <p id="status" role="status"></p>
+    </main>
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>
